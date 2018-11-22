@@ -18,6 +18,23 @@ def controller(FORMAT, BOOTSTRAP, RESAMPLINGS, threshold, FILE_NAME_LIST):
         OUTPUT_STRING = "Bootstrap norm = " + str(BOOTSTRAP_NORM)
     else:
         Q, EQ = bw_estimator(threshold, MULTIALIGNMENT_LIST)
-        OUTPUT_STRING = "Q =\n" + str(Q) + "\nEQ =\n" + str(EQ)   
+
+        # Used to output the Q matrix:
+        # OUTPUT_STRING = "# Q =\n" + str(Q) + "\n# EQ =\n" + str(EQ)   
+
+        # ...but if outputting the R matrix (which is symmetrix and q_ij = r_ij*p_j)
+        # we get compatibility with other tools, like PhyML.
+        OUTPUT_STRING = ''
+        for row in range(1,20):
+            for col in range(0, row):
+                r = Q[row, col] / EQ[col]
+                OUTPUT_STRING += f'{r:10.5} '
+            OUTPUT_STRING += '\n'
+
+        EQ_STR = ''
+        for elem in range(0,20):
+            EQ_STR += f'{EQ[elem]:10.5} '
+
+        OUTPUT_STRING += '\n' + EQ_STR
 
     return OUTPUT_STRING
