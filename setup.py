@@ -4,7 +4,10 @@ import setuptools
 
 with open("README.txt", "r") as fh:
     long_description = fh.read()
-	
+
+with open('modelestimator/version.py') as fh:
+    exec(fh.read())
+    
 setuptools.setup(
 	name='modelestimator-v2',
 	version='0.0.4',
@@ -22,9 +25,10 @@ setuptools.setup(
 		]
 	},
 	install_requires=[
-	"scipy",
-	"numpy",
-	"biopython"
+            'argparse',
+	    "scipy",
+	    "numpy",
+	    "biopython"
 	],
 	setup_requires=['pytest-runner'],
 	tests_require=['pytest']
