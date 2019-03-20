@@ -4,7 +4,7 @@ import numpy as np
 def _create_count_matrix(SEQUENCE_PAIRS):
     return_matrix = np.zeros((20,20))
     
-    ALPHABET = ('A', 'R', 'N', 'D', 'C', 'Q', 'E', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V')
+    ALPHABET = 'ARNDCQEGHILKMFPSTWYV'
     alphabet_dictionary = {}
     for i, letter in enumerate(ALPHABET):
         alphabet_dictionary[letter] = i
@@ -13,7 +13,7 @@ def _create_count_matrix(SEQUENCE_PAIRS):
         a = SEQUENCE_PAIRS[0][i]
         b = SEQUENCE_PAIRS[1][i]
         
-        if a == '-' or b == '-':
+        if a not in ALPHABET or b not in ALPHABET:
             continue
         
         return_matrix[alphabet_dictionary[b]][alphabet_dictionary[a]] = return_matrix[alphabet_dictionary[b]][alphabet_dictionary[a]] + 1
