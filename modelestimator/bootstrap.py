@@ -63,7 +63,7 @@ def q_bootstrap_estimate(resampled_Q_list):
 
 
 #   Interface
-def bootstrapper(resamplings, threshold, multialignment):
+def bootstrapped_stability(resamplings, threshold, multialignment):
     multialignment_list = [multialignment]
     try:
         reference_Q, _ = bw_estimator(threshold, multialignment_list)
