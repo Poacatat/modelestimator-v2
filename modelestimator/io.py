@@ -7,14 +7,8 @@ def handle_input_file(file_path, format):
     Return aligned sequences found in given file. 
     Note that the format parameter is a string accepted by AlignIO.read().
     '''
-    try:
-        seq_list = AlignIO.read(file_path, format)
-    except Exception as e:
-        error_string = f'Format error in {file_path}: '
-        sys.exit(error_string + str(e))
-        
-
-    seq_list = [sequence.seq._data for sequence in seq_list]
+    seq_list = AlignIO.read(file_path, format)
+    seq_list = [str(sequence.seq) for sequence in seq_list]
 
     number_of_sequences = len(seq_list)
     sequence_length = len(seq_list[0])
@@ -31,7 +25,7 @@ def format_model_output(Q, eq, out_format):
     elif out_format == 'raxml':
         raise Exception('RAxML support is not yet implemented')
     elif out_format == 'mrbayes':
-        raise mrbayes_model_output(Q, eq)
+        return mrbayes_model_output(Q, eq)
     elif out_format in ['matlab', 'octave']:
         return octave_model_output(Q, eq)
 
