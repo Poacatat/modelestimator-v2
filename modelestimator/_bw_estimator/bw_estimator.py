@@ -2,15 +2,22 @@ from ._calculate_q_eq.match_closest_pair import match_closest_pairs
 from ._calculate_q_eq.create_count_matrices import create_count_matrices
 from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
 
-# COMPARE_INDELS_FLAG decides if indels should be included when comparing likeness of sequences
-def bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST, COMPARE_INDELS_FLAG = False):
+def bw_estimator(threshold, msa_list, compare_indels_flag = False):
+    '''
+    threshold  -  Decides when to stop iterations
+    msa_list   -  A list of alignments 
+    compare_indels_flag  -  decides if indels should be included when comparing likeness of sequences
+
+    Returns: a rate matrix and a corresponding steady state distribution on amino acids,
+             as estimated with the BW method.
+    '''
     aggregated_count_matrix_list = []
     
-    for MULTIALIGNMENT in MULTIALIGNMENT_LIST:
-        CLOSEST_PAIRS = match_closest_pairs(MULTIALIGNMENT, COMPARE_INDELS_FLAG)
-        COUNT_MATRIX_LIST = create_count_matrices(CLOSEST_PAIRS)
-        aggregated_count_matrix_list.extend(COUNT_MATRIX_LIST)
+    for msa in msa_list:
+        closest_pairs = match_closest_pairs(msa, compare_indels_flag)
+        count_matrix_list = create_count_matrices(closest_pairs)
+        aggregated_count_matrix_list.extend(count_matrix_list)
 
-    Q, EQ = calculate_q_eq(aggregated_count_matrix_list, THRESHOLD)
+    Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
     
-    return Q, EQ
+    return Q, eq
