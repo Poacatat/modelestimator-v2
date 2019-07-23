@@ -5,21 +5,9 @@ from modelestimator.version import __version__
 
 from modelestimator._bw_estimator.bw_estimator import bw_estimator
 from modelestimator.io import handle_input_file, format_model_output
-from modelestimator._bootstraper.bootstraper import bootstraper
+from modelestimator.bootstrap import bootstrapped_stability, q_bootstrap_estimate
 
 
-USAGE_STRING ="""Usage: python -m modelestimator <format> <options> infiles
-
-<format> should be either FASTA, STOCKHOLM or PHYLIP
-Output is a rate matrix and residue distribution vector.
-        
-Options:
-    -threshold or -t <f> Stop when consecutive iterations do not change by more
-                     than <f>. Default is 0.001.
-    -bootstrap or -b <r> Perform bootstrapping on multialignment with <r> resamplings.
-                         Only one infile should be given in this mode. Returns
-                         bootstrap norm.
-"""
 
 description='''
 Infer a amino-acid replacement-rate matrix from one or more protein multisequence
@@ -49,46 +37,47 @@ def setup_argument_parsing():
     ap.add_argument('-t', '--threshold', type=float, metavar='T', default=0.001,
                     help="Stop when consecutive iterations do not change by more than T. Default: %(default)g")
     ap.add_argument('-b', '--bootstrap', type=int, metavar='N', default=None,
-                    help="Perform bootstrapping on multialignment with N resamplings. Only one infile should be given in this mode. Returns bootstrap norm.")
+                    help="Estimate the rate matrix using bootstrapping by computing  N resampled replicates of the input multialignment. For each replicate, a rate matrix is computed. The mean matrix the elementwise standard deviation is returned. Only one infile should be given in this mode.")
+    ap.add_argument('-B', '--bootstrapped_quality', type=int, metavar='N', default=None,
+                    help="Estimate the quality of the rate matrix estimate using a bootstrap procedure. The multialignment is resampled N times and a Q matrix is computed for each replicate. Then the difference (matrix norm) between rate matrix estimated without resampling and each bootstrapped Q is computed and the mean difference is returned. Only one infile should be given in this mode. Returns bootstrap norm.")
     return ap
 
-
-def controller(msa_format, output_format, bootstraps, threshold, filenames):
-    '''
-    Control the actions of the program.
-    In: 
-        msa_format - One of the allowed input formats, recognised by BioPython.
-        bootstraps - None or an integer for the number of replacements in the bootstrap procedure.
-        threshold  - Determines when to stop iterations, the minimum improvement before termination.
-        
-    '''
-    multialignment_list = []
-    
-    for file in filenames:
-        multialignment = handle_input_file(file, msa_format)
-        multialignment_list.append(multialignment) 
-        
-    if threshold == None:
-        threshold = 0.001
-    
-    if bootstraps:
-        multialignment = multialignment_list[0]
-        bootstrap_norm,_ = bootstraper(bootstraps, threshold, multialignment)
-        output_string = "Bootstrap norm = " + str(bootstrap_norm)
-    else:
-        Q, EQ = bw_estimator(threshold, multialignment_list)
-        output_string = format_model_output(Q, EQ, output_format)
-
-    return output_string
 
 def main():
     ap = setup_argument_parsing()
     args = ap.parse_args()
             
-    try:
-        output_string = controller(args.format, args.application, args.bootstrap, args.threshold, args.infiles)
-    except Exception as e:
-        print("Error: ", e)
-        exit()
+    multialignment_list = []
 
-    print(output_string)
+    for f in args.infiles:
+        try:
+            multialignment = handle_input_file(f, args.format)
+            multialignment_list.append(multialignment) 
+        except Exception as e:
+            print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
+            sys.exit(1)
+    try:
+        if args.bootstrapped_quality:
+            multialignment = multialignment_list[0]
+            bootstrap_norm, _ = bootstrapped_stability(args.bootstrapped_quality, args.threshold, multialignment)
+            print('Bootstrap norm = ' + str(bootstrap_norm))
+
+        elif args.bootstrap:
+            Q, eq, Q_sd, n_failures = q_bootstrap_estimate(multialignment_list, args.threshold, args.bootstrap)
+            print('This is, so far, nonsensical output. The R matrix is correct, but it is unclear what the SD matrix is. It is treated as a Q matrix.')
+            output_string = format_model_output(Q, eq, args.application)
+            output_string += '\n\n' + format_model_output(Q_sd, eq, args.application)
+            print(output_string)
+            if n_failures > 0:
+                print(f'Warning: the bootstrap failed in {n_failures} replicates.')
+
+        else:
+            Q, EQ = bw_estimator(args.threshold, multialignment_list) 
+            output_string = format_model_output(Q, EQ, args.application)
+            print(output_string)
+
+    except Exception as e:
+        print('Error:', e, file=sys.stderr)
+        sys.exit(1)
+
+
