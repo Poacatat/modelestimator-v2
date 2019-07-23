@@ -21,7 +21,7 @@ def calculate_q_eq(COUNT_MATRIX_LIST, THRESHOLD):
     q = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
 
     #   Set loop variables
-    difference = float("inf")
+    difference = 1+THRESHOLD
     iterations = 0
     MAX_ITERATIONS = 10
     
@@ -31,5 +31,4 @@ def calculate_q_eq(COUNT_MATRIX_LIST, THRESHOLD):
         q_new = simple_estimation(COUNT_MATRIX_LIST, q, VL, VR, EQ, DIST_SAMPLES)
         difference = np.linalg.norm(q_new - q)
         q = q_new
-
     return q, EQ
