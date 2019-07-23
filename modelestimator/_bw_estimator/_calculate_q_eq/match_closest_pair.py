@@ -17,7 +17,14 @@ def _matching_letters(a,b, COMPARE_INDELS_FLAG):
     return number_of_matching_positions
 
 ### Interface
-def match_closest_pairs(sequence_list, COMPARE_INDELS_FLAG):
+def choose_close_pairs(sequence_list, COMPARE_INDELS_FLAG):
+    '''
+    Greedily choose a list of sequence pairs based on sequence identity.
+    The objective is to avoid the furthermost pairs and to avoid 
+    over-sampling of some sequences and edges (in the underlying tree).
+
+    Returns a list of sequence pairs.
+    '''
     indexes_and_matching_letters = []
 
     for PRIMARY_INDEX, PRIMARY_SEQUENCE in enumerate(sequence_list):
@@ -30,21 +37,21 @@ def match_closest_pairs(sequence_list, COMPARE_INDELS_FLAG):
             indexes_and_matching_letters.append(INDEX_SCORE_TUPLE)
 
     indexes_and_matching_letters.sort(key=lambda tup: tup[1], reverse = True)   # Sort on matching letters
+
     matched_indexes = []
-    closest_pairs = []
+    close_pairs = []
     NUMBER_OF_SEQUENCES = len(sequence_list)
 
     while (NUMBER_OF_SEQUENCES - len(matched_indexes)) >= 2:
         CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE = indexes_and_matching_letters.pop(0)
-        FIRST_INDEX = CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE[0][1]
-        SECOND_INDEX = CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE[0][0]
+        index1, index2 = CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE[0]
 
-        if not(FIRST_INDEX in matched_indexes) and not(SECOND_INDEX in matched_indexes):
-            matched_indexes.append(FIRST_INDEX)
-            matched_indexes.append(SECOND_INDEX)
+        if not(index1 in matched_indexes) and not(index2 in matched_indexes):
+            matched_indexes.append(index1)
+            matched_indexes.append(index2)
 
-            FIRST_SEQUENCE = sequence_list[FIRST_INDEX]
-            SECOND_SEQUENCE = sequence_list[SECOND_INDEX]
-            closest_pairs.append((FIRST_SEQUENCE, SECOND_SEQUENCE))
+            seq1= sequence_list[index1]
+            seq2 = sequence_list[index2]
+            close_pairs.append((seq1, seq2))
 
-    return closest_pairs
+    return close_pairs
