@@ -6,16 +6,16 @@ from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
 # Scale Q so that the average mutation rate is 0.01
 def scale_q(Q, EQ):
         SCALE_FACTOR = np.dot(EQ, (-np.diag(Q))) * 100
-        
+
         if(SCALE_FACTOR == 0):
-            raise ValueError('Divison with zero in scale_q')
-        
+            raise ZeroDivisionError('No Q diagonal cause a problem in estimate_q.py:scale_q')
+
         Q /= SCALE_FACTOR
-        
+
         return Q
 
-#   Sometimes, when data is sparse, Q estimates come out with 
-#   off-diagonal entries being negative. Not good. 
+#   Sometimes, when data is sparse, Q estimates come out with
+#   off-diagonal entries being negative. Not good.
 def fix_negatives(Q):
     # Replace negative elements with smallest absolute value
     MINIMUM_ELEMENT = np.min(np.abs(Q))
@@ -39,10 +39,10 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
     X = np.empty(NUMBER_OF_DIST_SAMPLES, dtype="float64").reshape((80,1))
     Y = np.empty((20, NUMBER_OF_DIST_SAMPLES))
-    
+
     # Find the eigenvector corresponding to eigenvalue = 1
     _, NULL_VECTOR_INDEX = find_zero_eigenvalue_eigenvector(VL)
-    
+
     # Gather some datapoints
     for i, DIST_SAMPLE in enumerate(DIST_SAMPLES):
         ELAMBDA = np.diag(VL @ PW[i] @ VR)
@@ -51,7 +51,7 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
         for li in range(20):
             if (li == NULL_VECTOR_INDEX):
                 continue
-        
+
             if (ELAMBDA[li] > 0):    # Skip complex value data points!
                 Y[li, i] = np.real(np.log(ELAMBDA[li])) * W[i]
             else:
