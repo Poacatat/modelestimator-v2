@@ -6,15 +6,18 @@ import sys
 import os
 
 from ._bw_estimator.bw_estimator import bw_estimator
+from ._bw_estimator._calculate_q_eq.match_closest_pair import choose_close_pairs
+from ._bw_estimator._calculate_q_eq.create_count_matrices import create_count_matrices
+from ._bw_estimator._calculate_q_eq.calculate_q_eq import calculate_q_eq
 
 #   Private functions
-def resample_columns(MULTIALIGNMENT_ARRAY):
-    new_multialignment = np.empty_like(MULTIALIGNMENT_ARRAY)
-    SEQUENCE_LENGTH = MULTIALIGNMENT_ARRAY.shape[1]
+def resample_columns(multialignment_array):
+    new_multialignment = np.empty_like(multialignment_array)
+    sequence_length = multialignment_array.shape[1]
 
-    for COLUMN_INDEX in range(SEQUENCE_LENGTH):
-        RANDOM_INDEX = random.randint(0, SEQUENCE_LENGTH - 1)
-        new_multialignment[:, COLUMN_INDEX] = MULTIALIGNMENT_ARRAY[:, RANDOM_INDEX]
+    for column_index in range(sequence_length):
+        random_index = random.randint(0, sequence_length - 1)
+        new_multialignment[:, column_index] = multialignment_array[:, random_index]
 
     return new_multialignment
 
@@ -48,19 +51,6 @@ def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
 
     return Q_DIFF_MEAN
 
-def q_bootstrap_estimate(resampled_Q_list):
-    '''
-    Compute the mean Q matrix and elementwise standard deviations given a list of bootstrap Q
-    estimate from resampled alignments.
-
-    Return estimated Q and the std dev as an error estimate.
-    '''
-    collection = np.stack(resampled_Q_list)
-    mean_estimate = np.mean(collection, axis=0) # Corresponds to elementwise mean
-    std_dev = np.std(collection, axis=0)        # ...and standard deviation
-
-    return mean_estimate, std_dev
-
 
 #   Interface
 def bootstrapped_stability(resamplings, threshold, multialignment):
@@ -75,3 +65,42 @@ def bootstrapped_stability(resamplings, threshold, multialignment):
     mean_difference *= 10000
 
     return mean_difference, failed_percentage
+
+
+def q_bootstrap_estimate(msa_list, threshold, n_bootstraps, compare_indels_flag=False):
+    '''
+    Compute the mean Q matrix and elementwise standard deviations from resamplings of an input alignment.
+
+    Return estimated Q and the std dev as an error estimate.
+    '''
+    resampled_Q_list = []
+    mean_eq = None
+    n_failures = 0
+    for i in range(n_bootstraps):
+        try:
+            aggregated_count_matrix_list = []
+            for msa in msa_list:
+                resampled_msa = resample_columns(msa)
+                close_pairs = choose_close_pairs(resampled_msa, compare_indels_flag)
+                count_matrices = create_count_matrices(close_pairs)
+                aggregated_count_matrix_list.extend(count_matrices)
+            Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
+            resampled_Q_list.append(Q)
+            if i > 0:
+                mean_eq += eq
+            else:
+                mean_eq = eq
+        except Exception as e:
+            print('Bootstrap replicate problem:', str(e))
+            n_failures += 1
+
+    failed_percentage = float(n_failures) / n_bootstraps
+    if failed_percentage <= 0.25:
+        collection = np.stack(resampled_Q_list)
+        mean_estimate = np.mean(collection, axis=0) # Corresponds to elementwise mean
+        mean_eq = mean_eq / (n_bootstraps - n_failures)
+        std_dev = np.std(collection, axis=0)        # ...and standard deviation
+        return mean_estimate, mean_eq, std_dev, n_failures
+    else:
+        raise ValueError(f'Too many failed bootstrap replicate attempts, {n_failures} out of {n_bootstraps} (i.e., {failed_percentage:.2})')
+
