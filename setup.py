@@ -7,16 +7,16 @@ with open("README.txt", "r") as fh:
 
 with open('modelestimator/version.py') as fh:
     exec(fh.read())
-    
+
 setuptools.setup(
 	name='modelestimator-v2',
-	version='0.0.4',
-	author='Ruben Ridderström',
+	version='0.0.6',
+	author='Ruben Ridderström and Lars Arvestad',
 	author_email='ruben.ridderstrom@gmail.com',
 	description='Program for estimating amino acid replacement rates',
 	long_description=long_description,
 	long_description_content_type="text/plain; charset=UTF-8",
-	url='https://github.com/RubenRidderstrom/modelestimator',
+	url='https://github.com/arvestad/modelestimator-v2',
 	license='GPLv3',
 	packages = setuptools.find_packages(),
 	entry_points={
