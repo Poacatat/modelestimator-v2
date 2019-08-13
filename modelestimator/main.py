@@ -16,8 +16,8 @@ distribution vector.
 '''
 example_usage='''
 Example usage:
-    modelestimator fasta -t 0.001 file1.fa file2.fa file3.fa
-    modelestimator fasta -b 200 file.fa
+    modelestimator -t 0.001 file1.fa file2.fa file3.fa
+    modelestimator -b 200 file.fa
 '''
 
 def setup_argument_parsing():
@@ -46,13 +46,13 @@ def setup_argument_parsing():
 def main():
     ap = setup_argument_parsing()
     args = ap.parse_args()
-            
+
     multialignment_list = []
 
     for f in args.infiles:
         try:
             multialignment = handle_input_file(f, args.format)
-            multialignment_list.append(multialignment) 
+            multialignment_list.append(multialignment)
         except Exception as e:
             print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
             sys.exit(1)
@@ -72,12 +72,10 @@ def main():
                 print(f'Warning: the bootstrap failed in {n_failures} replicates.')
 
         else:
-            Q, EQ = bw_estimator(args.threshold, multialignment_list) 
+            Q, EQ = bw_estimator(args.threshold, multialignment_list)
             output_string = format_model_output(Q, EQ, args.application)
             print(output_string)
 
     except Exception as e:
         print('Error:', e, file=sys.stderr)
         sys.exit(1)
-
-
