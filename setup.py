@@ -5,17 +5,17 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open('modelestimator/version.py') as fh:
+with open('modelestimator/version.py') as fh: # __version__ is defined here
     exec(fh.read())
 
 setuptools.setup(
 	name='modelestimator-v2',
-	version='0.0.6',
+	version=__version__,
 	author='Ruben Ridderström and Lars Arvestad',
 	author_email='ruben.ridderstrom@gmail.com',
 	description='Program for estimating amino acid replacement rates',
 	long_description=long_description,
-	long_description_content_type="text/plain; charset=UTF-8",
+        long_description_content_type="text/markdown; charset=UTF-8",
 	url='https://github.com/arvestad/modelestimator-v2',
 	license='GPLv3',
 	packages = setuptools.find_packages(),
