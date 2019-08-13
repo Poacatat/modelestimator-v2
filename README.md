@@ -7,6 +7,8 @@
     modelestimator -t 0.001 file1.fa file2.fa file3.fa
 ```
 Infer a rate matrix (written to stdout) from three alignment files in Fasta format.
+The output is PAML format by default, and therefore applicable in a number of
+available phylogenetic softwares.
 
 ``` shell
     modelestimator -b 200 file.fa
