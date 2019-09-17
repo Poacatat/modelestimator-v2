@@ -4,7 +4,7 @@ from Bio import AlignIO
 
 def handle_input_file(file_path, format):
     '''
-    Return aligned sequences found in given file. 
+    Return aligned sequences found in given file.
     Note that the format parameter is a string accepted by AlignIO.read().
     '''
     seq_list = AlignIO.read(file_path, format)
@@ -20,10 +20,8 @@ def handle_input_file(file_path, format):
     return new_array
 
 def format_model_output(Q, eq, out_format):
-    if out_format in ['iqtree', 'paml', 'phyml']:
+    if out_format in ['iqtree', 'paml', 'phyml', 'raxml']:
         return paml_model_output(Q, eq)
-    elif out_format == 'raxml':
-        raise Exception('RAxML support is not yet implemented')
     elif out_format == 'mrbayes':
         return mrbayes_model_output(Q, eq)
     elif out_format in ['matlab', 'octave']:
@@ -31,7 +29,7 @@ def format_model_output(Q, eq, out_format):
 
 def paml_model_output(Q, eq):
     '''
-    Construct and return a string containing the 
+    Construct and return a string containing the
     R matrix (which is symmetric and q_ij = r_ij*p_j)
     for subsequent use in PAML.
     '''
@@ -41,7 +39,7 @@ def paml_model_output(Q, eq):
             r = Q[row, col] / eq[col]
             output_string += f'{r:<8.3} '
         output_string += '\n'
-            
+
     eq_str = ''
     for elem in range(0,20):
         eq_str += f'{eq[elem]:<8.3} '
@@ -82,4 +80,3 @@ def octave_model_output(Q, eq):
 
 # ...but if outputting the R matrix (which is symmetric and q_ij = r_ij*p_j)
 # we get compatibility with other tools, like PhyML.
-    
