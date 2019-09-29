@@ -29,7 +29,7 @@ def setup_argument_parsing():
     ap.add_argument('infiles', nargs='+', help="One or more infiles, containing protein multialignments in FASTA format or chosen according to the -f/--format option.")
     ap.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     ap.add_argument('-a', '--application', choices=['iqtree', 'matlab', 'mrbayes', 'octave', 'paml', 'phyml', 'raxml'], default='paml',
-                    help="Choose output format to suit the application you want to use for inference. The 'iqtree', 'paml', 'phyml', and 'raxml' options are identical. The 'matlab' and 'octave' optins are for import into MatLab-compatible programs and are presenting the actual Q matrix rather than the R matrix used by PAML/PhyML, etc. Default: %(default)s")
+                    help="Choose output format to suit the application you want to use for inference. The 'iqtree', 'paml', 'phyml', and 'raxml' options are identical. The 'matlab' and 'octave' options are for import into MatLab-compatible programs and are presenting the actual Q matrix rather than the R matrix used by PAML/PhyML, etc. Default: %(default)s")
     ap.add_argument('-f', '--format', choices=['fasta', 'clustal', 'nexus', 'phylip', 'stockholm'], default='fasta',
                     help="Specify sequence format of input files. Default: %(default)s")
     # ap.add_argument('-f', '--format', choices=['guess', 'fasta', 'clustal', 'nexus', 'phylip', 'stockholm'], default='guess',
