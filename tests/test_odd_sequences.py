@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from modelestimator._bw_estimator.bw_estimator import bw_estimator
-from modelestimator._handle_input.handle_input_file import handle_input_file
+from modelestimator.io import handle_input_file
 
 #   Test that bw_estimator works with a multialignment
 #   consisting of an odd number of sequences

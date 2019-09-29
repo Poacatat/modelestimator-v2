@@ -4,8 +4,8 @@ import numpy as np
 from Bio import AlignIO
 
 sys.path.insert(1, os.path.abspath(os.path.join(sys.path[0], "..")))
-from modelestimator._bootstraper.bootstraper import bootstraper
-from modelestimator._handle_input.handle_input_file import handle_input_file
+from modelestimator.bootstrap import q_bootstrap_estimate
+from modelestimator.io import handle_input_file
 
 def test_bootstrap_1():
     REFERENCE_FILE_PATH = os.path.abspath(os.path.join(sys.path[0], "tests/test_bootstrap_1/1000LongMultialignment.phylip"))
@@ -13,7 +13,8 @@ def test_bootstrap_1():
 
     RESAMPLINGS = 25
     THRESHOLD = 0.001
-    BOOTSTRAP_NORM,_ = bootstraper(RESAMPLINGS, THRESHOLD, MULTIALIGNMENT)
-    assert (BOOTSTRAP_NORM > 35) and (BOOTSTRAP_NORM < 45)
+    Q_mean, EQ_mean, Q_SD, n_failures = q_bootstrap_estimate([MULTIALIGNMENT], THRESHOLD, RESAMPLINGS)
+    assert n_failures == 0
+    assert np.sum(Q_SD) < 1
 
 test_bootstrap_1()

@@ -4,7 +4,7 @@ import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from modelestimator._bw_estimator.bw_estimator import bw_estimator
-from modelestimator._handle_input.handle_input_file import handle_input_file
+from modelestimator.io import handle_input_file
 
 def test_case_2(tmpdir):
         #   Create directory paths
