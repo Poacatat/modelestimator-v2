@@ -5,7 +5,7 @@ from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
 
 # Scale Q so that the average mutation rate is 0.01
 def scale_q(Q, EQ):
-        SCALE_FACTOR = np.dot(EQ, (-np.diag(Q))) * 100
+        SCALE_FACTOR = np.dot(EQ, (-np.diag(Q)))
 
         if(SCALE_FACTOR == 0):
             raise ZeroDivisionError('No Q diagonal cause a problem in estimate_q.py:scale_q')
