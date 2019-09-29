@@ -37,12 +37,12 @@ def paml_model_output(Q, eq):
     for row in range(1,20):
         for col in range(0, row):
             r = Q[row, col] / eq[col]
-            output_string += f'{r:<8.3} '
+            output_string += f'{r:<8.5} '
         output_string += '\n'
 
     eq_str = ''
     for elem in range(0,20):
-        eq_str += f'{eq[elem]:<8.3} '
+        eq_str += f'{eq[elem]:<8.5} '
 
     output_string += '\n' + eq_str
     return output_string
@@ -58,7 +58,7 @@ def mrbayes_model_output(Q, eq):
     for row in range(1,20):
         for col in range(0, row):
             r = Q[row, col] / eq[col]
-            rate_list.append(f'{r:8.3}')
+            rate_list.append(f'{r:8.5}')
     output_string += ','.join(rate_list) + ')'
     return output_string
 
