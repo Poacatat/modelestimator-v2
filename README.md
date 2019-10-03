@@ -1,4 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/modelestimator-v2.svg)](https://badge.fury.io/py/modelestimator-v2)
+[![Build Status](https://travis-ci.com/arvestad/modelestimator-v2.svg?branch=master)](https://travis-ci.com/arvestad/modelestimator-v2)
 # modelestimator --- Infer sequence evolution rate matrices from a MSA
 
 
