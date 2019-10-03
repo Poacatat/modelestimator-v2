@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/modelestimator-v2.svg)](https://badge.fury.io/py/modelestimator-v2)
 # modelestimator --- Infer sequence evolution rate matrices from a MSA
 
 
