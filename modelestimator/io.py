@@ -38,13 +38,14 @@ def paml_model_output(Q, eq):
         for col in range(0, row):
             r = Q[row, col] / eq[col]
             output_string += f'{r:<8.5} '
+        output_string = output_string.rstrip()
         output_string += '\n'
 
     eq_str = ''
     for elem in range(0,20):
         eq_str += f'{eq[elem]:<8.5} '
 
-    output_string += '\n' + eq_str
+    output_string += '\n' + eq_str.rstrip()
     return output_string
 
 def mrbayes_model_output(Q, eq):
@@ -64,19 +65,26 @@ def mrbayes_model_output(Q, eq):
 
 def octave_model_output(Q, eq):
     '''
-    Output a MatLab-style matrix and vector assigned to 'Q' and a 'eq'.
+    Output an Octave-style matrix and vector assigned to 'Q' and a 'eq'.
     NOTE: It is the Q matrix, not the symmetric replacment rates as e.g. PAML
           and PhyML prefers.
     '''
-    q_str = 'Q = ['
-    rows = []
+    q_str = '''# name: Q
+# type: matrix
+# rows: 20
+# columns: 20
+'''
     for row in Q:
-        rows.append(', '.join(map(str,row)))
-    q_str += ';\n'.join(rows)
-    q_str += ']'
+        q_str += '  '.join(map(lambda e: str(round(e, 6)),row))
+        q_str += '\n'
 
-    eq_str = 'EQ = [' + ' '.join(map(str, eq)) + ']'
-    return q_str + '\n' + eq_str + '\n\n### Note: matlab/octave output has not yet been properly tested! ###'
+    eq_str = '''# name: eq
+# type: matrix
+# rows: 1
+# columns: 20
+'''
+    eq_str += ' '.join(map(lambda e: str(round(e, 6)), eq))
+    return q_str + '\n' + eq_str
 
 # ...but if outputting the R matrix (which is symmetric and q_ij = r_ij*p_j)
 # we get compatibility with other tools, like PhyML.
