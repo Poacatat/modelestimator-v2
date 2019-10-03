@@ -16,10 +16,10 @@ def test_case_2(tmpdir):
     FILE_PATH = os.path.join(TEST_FILES_PATH, SEQUENCE_FILE_NAME)
 
     #   Load reference Q and EQ
-    REFERENCE_Q_PATH = os.path.join(TEST_FILES_PATH, 'testcase2_20seqs_1000long_50pam_Q.npy')
-    REFERENCE_Q = np.load(REFERENCE_Q_PATH)
-    REFERENCE_EQ_PATH = os.path.join(TEST_FILES_PATH, 'testcase2_20seqs_1000long_50pam_EQ.npy')
-    REFERENCE_EQ = np.load(REFERENCE_EQ_PATH)
+    REFERENCE_Q_PATH = os.path.join(TEST_FILES_PATH, 'reference_Q.txt')
+    REFERENCE_Q = np.loadtxt(REFERENCE_Q_PATH)
+    REFERENCE_EQ_PATH = os.path.join(TEST_FILES_PATH, 'reference_EQ.txt')
+    REFERENCE_EQ = np.loadtxt(REFERENCE_EQ_PATH)
 
     #   Calculate Q and EQ
     FORMAT = "fasta"
@@ -29,5 +29,5 @@ def test_case_2(tmpdir):
     CALCULATED_Q, CALCULATED_EQ = bw_estimator(THRESHOLD, MULTLIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
-    assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
-    assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
+    assert(np.allclose(CALCULATED_Q, REFERENCE_Q, atol=THRESHOLD))
+    assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ, atol=THRESHOLD))

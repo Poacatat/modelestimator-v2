@@ -15,6 +15,6 @@ def test_bootstrap_1():
     THRESHOLD = 0.001
     Q_mean, EQ_mean, Q_SD, n_failures = q_bootstrap_estimate([MULTIALIGNMENT], THRESHOLD, RESAMPLINGS)
     assert n_failures == 0
-    assert np.sum(Q_SD) < 1
+    assert np.sum(Q_SD) < 190*0.2
 
 test_bootstrap_1()

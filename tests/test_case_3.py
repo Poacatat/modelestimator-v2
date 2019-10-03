@@ -6,7 +6,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from modelestimator._bw_estimator.bw_estimator import bw_estimator
 from modelestimator.io import handle_input_file
 
-def test_case_2(tmpdir):
+def test_case_3(tmpdir):
         #   Create directory paths
     CURRENT_DIR = os.path.dirname(__file__)
     TEST_FILES_PATH = os.path.join(CURRENT_DIR, 'test_case_3/')
@@ -33,5 +33,6 @@ def test_case_2(tmpdir):
     CALCULATED_Q, CALCULATED_EQ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
-    assert(np.allclose(CALCULATED_Q, REFERENCE_Q))
-    assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ))
+    print(CALCULATED_Q)
+    assert(np.allclose(CALCULATED_Q, REFERENCE_Q, atol=THRESHOLD))
+    assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ, atol=THRESHOLD))
