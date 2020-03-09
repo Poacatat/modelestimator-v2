@@ -39,9 +39,9 @@ setuptools.setup(
     },
     install_requires=[
         'argparse',
-        "scipy",
-        "numpy",
-        "biopython"
+        "scipy>=1.1",
+        "numpy>=1.14",
+        "biopython>=1.70"
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest']
