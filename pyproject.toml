@@ -1,0 +1,45 @@
+[project]
+name = "modelestimator-v2"
+authors = [
+    {name = "Lars Arvestad", email = "arve@math.su.se"},
+    {name = "Ruben Ridderström"},
+]
+maintainers = [
+    {name = "Lars Arvestad", email = "arve@math.su.se"},
+]
+description = "Program for estimating amino acid replacement rates"
+readme = "README.md"
+license = {text = "GNU General Public License v3 (GPLv3)"}
+classifiers = [
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Operating System :: OS Independent",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dynamic = ["version"]
+
+dependencies = [
+        "scipy>=1.1",
+        "numpy>=1.14",
+ 	"biopython>=1.70"
+]
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project.scripts]
+modelestimator = "modelestimator.main:main"
+
+
+[project.urls]
+homepage = "https://github.com/arvestad/modelestimator-v2"
+
+
+[tool.setuptools]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "modelestimator.version.__version__"}
