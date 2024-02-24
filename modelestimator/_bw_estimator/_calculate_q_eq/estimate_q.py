@@ -1,7 +1,51 @@
 import numpy as np
-from .find_zero_eigenvalue_eigenvector import find_zero_eigenvalue_eigenvector
+from scipy.linalg import eig
 
-### Private functions
+def find_zero_eigenvalue_eigenvector(matrix):
+    '''
+    Find the index of the eigenvector corresponding to Q's zero eigenvalue.
+    This is recognized as the row (because we will be looking at the 'right'
+    eigenvectors, not the usual left) with all positive or all negative elements.
+    '''
+    zero_eigenvector_candidates = []
+    for index, eigen_vector in enumerate(matrix):
+        if all(eigen_vector > 0) or all(eigen_vector < 0):
+         zero_eigenvector_candidates.append((eigen_vector, index))
+
+    if (len(zero_eigenvector_candidates) > 1):
+        raise ValueError("More than one candidate for null-vector")
+    if (len(zero_eigenvector_candidates) == 0):
+        raise ValueError("No candidate for null-vector!")
+        
+    eigen_vector, index = zero_eigenvector_candidates[0]
+
+    #   Returns as list to return copy and not reference
+    return list(eigen_vector), index
+
+
+def find_eigens(count_matrix_list):
+    p_sum = sum(0.5 * (matrix + matrix.T) for matrix in count_matrix_list)
+
+    # Make every row sum to 1
+    row_sums = np.linalg.norm(p_sum, axis=1, ord=1, keepdims=1)
+    p_sum = np.divide(p_sum, row_sums, out=np.zeros_like(p_sum), where=row_sums != 0)   # Only divide where the row sum is non-zero
+
+    try:
+        eigen_values, vr = eig(p_sum, left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of p_sum
+    except ValueError:
+        raise ValueError("Unable to calculate eigenvalues")
+
+    if not np.all(np.isreal(eigen_values)):
+        raise ValueError("An eigenvalue is complex")
+
+    vl = np.linalg.inv(vr)
+
+    eq,_ = find_zero_eigenvalue_eigenvector(vl)
+    eq /= np.linalg.norm(eq, ord=1)
+    eq = np.absolute(eq)
+
+    return vl, vr, eq
+
 
 # Scale Q so that the average mutation rate is 0.01
 def scale_q(Q, EQ):
@@ -13,6 +57,7 @@ def scale_q(Q, EQ):
         Q /= SCALE_FACTOR
 
         return Q
+
 
 #   Sometimes, when data is sparse, Q estimates come out with
 #   off-diagonal entries being negative. Not good.
@@ -26,6 +71,7 @@ def fix_negatives(Q):
     np.fill_diagonal(Q, -ROW_SUMS)
 
     return Q
+
 
 def recover_q(L, VR, VL):
     Q = 0.01 * (VR @ np.diag(L) @ VL)
@@ -65,7 +111,8 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
             L[i] = 0
         else:
             tempY = Y[i,:].reshape(80,1)
-            L[i] = np.linalg.lstsq(X, tempY, rcond = None)[0]
+            res = np.linalg.lstsq(X, tempY, rcond = None)[0][0][0]
+            L[i] = res
 
     return L
 
