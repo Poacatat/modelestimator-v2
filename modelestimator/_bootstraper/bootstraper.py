@@ -1,14 +1,18 @@
-import copy
+'''import copy
 import random
 import numpy as np
 import math
 import sys
 import os
 
+# SO this entire file is useless?
+
 ### TO BE DELETED
 
 sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from _bw_estimator.bw_estimator import bw_estimator
+
+
 
 #   Private functions
 def resample_columns(MULTIALIGNMENT_ARRAY):
@@ -52,12 +56,12 @@ def q_diff_mean(REFERENCE_Q, RESAMPLED_Q_LIST):
     return Q_DIFF_MEAN
 
 def q_bootstrap_estimate(resampled_Q_list):
-    '''
+    \'''
     Compute the mean Q matrix and elementwise standard deviations given a list of bootstrap Q
     estimate from resampled alignments.
 
     Return estimated Q and the std dev as an error estimate.
-    '''
+    \'''
     collection = np.stack(resampled_Q_list)
     mean_estimate = np.mean(collection, axis=0) # Corresponds to elementwise mean
     std_dev = np.std(collection, axis=0)        # ...and standard deviation
@@ -78,3 +82,4 @@ def bootstrapper(resamplings, threshold, multialignment):
     mean_difference *= 10000
 
     return mean_difference, failed_percentage
+'''

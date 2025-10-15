@@ -1,5 +1,7 @@
 import numpy as np
 
+import sys
+np.set_printoptions(threshold=sys.maxsize)
 ### Private functions
 def _matching_letters(a,b, COMPARE_INDELS_FLAG):
     if (len(a) != len(b)):
@@ -27,20 +29,25 @@ def choose_close_pairs(sequence_list, COMPARE_INDELS_FLAG):
     '''
     indexes_and_matching_letters = []
 
+    NUMBER_OF_SEQUENCES = len(sequence_list)
+
+    
+
     for PRIMARY_INDEX, PRIMARY_SEQUENCE in enumerate(sequence_list):
-        for SECONDARY_INDEX in range(PRIMARY_INDEX+1, len(sequence_list)):
+        
+        for SECONDARY_INDEX in range(PRIMARY_INDEX+1, NUMBER_OF_SEQUENCES):
             SECONDARY_SEQUENCE = sequence_list[SECONDARY_INDEX]
             MATCHING_LETTERS = _matching_letters(PRIMARY_SEQUENCE, SECONDARY_SEQUENCE, COMPARE_INDELS_FLAG)
 
             INDEXES = (PRIMARY_INDEX, SECONDARY_INDEX)
             INDEX_SCORE_TUPLE = (INDEXES, MATCHING_LETTERS)
             indexes_and_matching_letters.append(INDEX_SCORE_TUPLE)
-
+    ## So indices_and_matching_letters is a list of tuples, where the first element 
+    # is a tuple of two sequences, the second the amounnt if letter that match
     indexes_and_matching_letters.sort(key=lambda tup: tup[1], reverse = True)   # Sort on matching letters
 
     matched_indexes = []
     close_pairs = []
-    NUMBER_OF_SEQUENCES = len(sequence_list)
 
     while (NUMBER_OF_SEQUENCES - len(matched_indexes)) >= 2:
         CURRENT_INDEX_AND_MATCHING_LETTERS_TUPLE = indexes_and_matching_letters.pop(0)
@@ -53,5 +60,5 @@ def choose_close_pairs(sequence_list, COMPARE_INDELS_FLAG):
             seq1= sequence_list[index1]
             seq2 = sequence_list[index2]
             close_pairs.append((seq1, seq2))
-
+    # returns the n-2 closest pairs of sequences, closeness measured by matching letters
     return close_pairs

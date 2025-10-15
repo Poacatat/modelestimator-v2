@@ -26,6 +26,7 @@ def test_case_1(tmpdir):
     MULTIALIGNMENT = handle_input_file(FILE_PATH, FORMAT)
     MULTLIGNMENT_LIST = [MULTIALIGNMENT]
     THRESHOLD = 0.001
+    print("calling bw_estimator")
     CALCULATED_Q, CALCULATED_EQ = bw_estimator(THRESHOLD, MULTLIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass

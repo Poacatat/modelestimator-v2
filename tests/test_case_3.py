@@ -33,6 +33,6 @@ def test_case_3(tmpdir):
     CALCULATED_Q, CALCULATED_EQ = bw_estimator(THRESHOLD, MULTIALIGNMENT_LIST)
 
     #   Assert that calculated and references are close. Expected to pass
-    print(CALCULATED_Q)
+   
     assert(np.allclose(CALCULATED_Q, REFERENCE_Q, atol=THRESHOLD))
     assert(np.allclose(CALCULATED_EQ, REFERENCE_EQ, atol=THRESHOLD))

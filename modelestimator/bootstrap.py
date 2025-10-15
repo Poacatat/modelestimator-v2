@@ -12,6 +12,18 @@ from ._bw_estimator._calculate_q_eq.calculate_q_eq import calculate_q_eq
 
 #   Private functions
 def resample_columns(multialignment_array):
+    '''
+    Input:\n
+    A C G T\n
+    A C G T\n
+    A C G T\n
+
+    Output:\n
+    G A G T\n
+    G A G T\n
+    G A G T\n
+    (but random)
+    '''
     new_multialignment = np.empty_like(multialignment_array)
     sequence_length = multialignment_array.shape[1]
 
@@ -21,6 +33,8 @@ def resample_columns(multialignment_array):
 
     return new_multialignment
 
+# what is bw
+# Eq list is never used?
 def calculate_bw_for_resamplings(resamplings, threshold, multialignment):
     q_list = []
     eq_list = []
@@ -62,6 +76,8 @@ def bootstrapped_stability(resamplings, threshold, multialignment):
 
     resampled_q_list, failed_percentage = calculate_bw_for_resamplings(resamplings, threshold, multialignment)
     mean_difference = q_diff_mean(reference_Q, resampled_q_list)
+
+    # magic number
     mean_difference *= 10000
 
     return mean_difference, failed_percentage
