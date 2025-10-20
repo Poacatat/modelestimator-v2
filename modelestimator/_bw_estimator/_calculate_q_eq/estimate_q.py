@@ -24,7 +24,8 @@ def find_zero_eigenvalue_eigenvector(matrix):
 
 
 def find_eigens(count_matrix_list):
-    p_sum = sum(0.5 * (matrix + matrix.T) for matrix in count_matrix_list)
+    p_sum = sum(0.5 * (matrix + matrix.T) for matrix in count_matrix_list) 
+    # this normalization is a bit wierd
 
     # Make every row sum to 1
     row_sums = np.linalg.norm(p_sum, axis=1, ord=1, keepdims=1)

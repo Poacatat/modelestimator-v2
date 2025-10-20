@@ -8,24 +8,26 @@ def _create_count_matrix(SEQUENCE_PAIRS):
     alphabet_dictionary = {}
     for i, letter in enumerate(ALPHABET):
         alphabet_dictionary[letter] = i
-    
+    print(f"len(sequence_pairs) = {len(SEQUENCE_PAIRS)}")
     for i,_ in enumerate(SEQUENCE_PAIRS[0]):
-        a = SEQUENCE_PAIRS[0][i]
+        a = SEQUENCE_PAIRS[0][i] #len sequence pairs[0] should be 20
         b = SEQUENCE_PAIRS[1][i]
         
         if a not in ALPHABET or b not in ALPHABET:
             continue
         
-        return_matrix[alphabet_dictionary[b]][alphabet_dictionary[a]] = return_matrix[alphabet_dictionary[b]][alphabet_dictionary[a]] + 1
-        
+        return_matrix[alphabet_dictionary[b]][alphabet_dictionary[a]] += 1
+
     return return_matrix
 
 ### Interface
-def create_count_matrices(SEQUENCE_PAIRS):
+def  create_count_matrices(SEQUENCE_PAIRS):
 
     NUMBER_OF_SEQUENCE_PAIRS = len(SEQUENCE_PAIRS)
     count_matrix_list = np.empty((NUMBER_OF_SEQUENCE_PAIRS, 20, 20))
    
     count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS])
     
+
+    # count_matrix_list[0][a][b] tells you how many times a evolves to b, i think.
     return count_matrix_list
