@@ -9,12 +9,16 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     MATRIX_SUM = COUNT_MATRIX.sum()
     # here we for some reason get the total amount of transitions?
     MATRIX_DIAGONAL_SUM = COUNT_MATRIX.diagonal().sum()
-    # maybe using trace is faster.
+    # maybe using .trace() is faster.
     # trace right?
     # in this case i guess it is the amount of times the amino acid does not evolve
     P = np.exp(- DIST_SAMPLES / 100)
+    # is the correct jukes cantor?
+    # P_0(t) = 1/4 + 3/4 * exp(-4/3 * t)
+   
     
     likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P)
+    # fattar inte riktigt denna rad
 
 #   This code is not commented in Octave
 #    if (any(isnan(likelihood)))
@@ -24,7 +28,11 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     
     likelihood[0] /= 2
     likelihood[-1] /= 2
+    # trapezoidal rule? numerisk integration?
+
     # DIST_SAMPLES[1] - DIST_SAMPLES[0] is the step size, 5
+
+    # So we dived by delta x * sum, trap rule, so we basically normalise the likelihood
     POSTERIOR_VEC = likelihood / ( likelihood.sum() * (DIST_SAMPLES[1] - DIST_SAMPLES[0]) )
 
     return POSTERIOR_VEC    
