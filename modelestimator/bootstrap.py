@@ -109,7 +109,7 @@ def q_bootstrap_estimate(msa_list, threshold, n_bootstraps, compare_indels_flag=
         except Exception as e:
             print('Bootstrap replicate problem:', str(e))
             n_failures += 1
-
+    #TODO
     failed_percentage = float(n_failures) / n_bootstraps
     if failed_percentage <= 0.25:
         collection = np.stack(resampled_Q_list)

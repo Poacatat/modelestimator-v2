@@ -2,6 +2,8 @@ import sys
 import numpy as np
 from Bio import AlignIO
 
+#TODO: check if IO might actually take time, some python arrays here instead of numpy
+
 def handle_input_file(file_path, format):
     '''
     Return aligned sequences found in given file.

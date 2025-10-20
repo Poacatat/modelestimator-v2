@@ -12,7 +12,8 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     # maybe using .trace() is faster.
     # trace right?
     # in this case i guess it is the amount of times the amino acid does not evolve
-    P = np.exp(- DIST_SAMPLES / 100)
+    #DTYPECHANGE
+    P = np.exp(- DIST_SAMPLES / 100, dtype=np.float32)
     # is the correct jukes cantor?
     # P_0(t) = 1/4 + 3/4 * exp(-4/3 * t)
    
@@ -41,8 +42,9 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
 def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
     NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
-    PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES))
-    
-    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST])
+    #DTYPECHANGE
+    PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES), dtype=np.int16)
+    #DTYPECHANGE
+    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
     return PD
         

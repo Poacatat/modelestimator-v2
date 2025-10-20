@@ -13,7 +13,9 @@ def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     VL, VR, EQ = find_eigens(COUNT_MATRIX_LIST) #   EQ is never changed past this in Octave
     
     # Get a first simple estimate using a Jukes-Cantor model
-    distSamples = np.arange(1, 200, 5)
+
+    #DTYPECHANGE
+    distSamples = np.arange(1, 200, 5, dtype=np.int16)
     posterior = comp_posterior_JC(COUNT_MATRIX_LIST, distSamples)
     PW, W = matrix_weight(COUNT_MATRIX_LIST, posterior, distSamples)
     
@@ -25,7 +27,8 @@ def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     iteration = 0
     dv = []
     MAX_ITERATIONS = 10
-    Q = np.matrix((20,20))
+    #DTYPECHANGE
+    Q = np.matrix((20,20), dtype=np.float32)
     
     while (condition == False):
         iteration += 1

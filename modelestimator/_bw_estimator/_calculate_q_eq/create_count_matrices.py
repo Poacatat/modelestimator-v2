@@ -2,7 +2,8 @@ import numpy as np
 
 ### Private functions
 def _create_count_matrix(SEQUENCE_PAIRS):
-    return_matrix = np.zeros((20,20))
+    #DTYPECHANGE
+    return_matrix = np.zeros((20,20), dtype=np.int16)
     
     ALPHABET = 'ARNDCQEGHILKMFPSTWYV'
     alphabet_dictionary = {}
@@ -26,7 +27,8 @@ def  create_count_matrices(SEQUENCE_PAIRS):
     NUMBER_OF_SEQUENCE_PAIRS = len(SEQUENCE_PAIRS)
     count_matrix_list = np.empty((NUMBER_OF_SEQUENCE_PAIRS, 20, 20))
    
-    count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS])
+    #DTYPECHANGE
+    count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS], dtype=np.float32)
     
 
     # count_matrix_list[0][a][b] tells you how many times a evolves to b, i think.
