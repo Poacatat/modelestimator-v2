@@ -25,7 +25,8 @@ def find_zero_eigenvalue_eigenvector(matrix):
 
 def find_eigens(count_matrix_list):
     p_sum = sum(0.5 * (matrix + matrix.T) for matrix in count_matrix_list) 
-    # this normalization is a bit wierd
+    # this is a bit wierd
+    # anywho, it makes the matrix symmetric, which is maybe needed for the eigenvalue calculation
 
     # Make every row sum to 1
     row_sums = np.linalg.norm(p_sum, axis=1, ord=1, keepdims=1)
@@ -39,11 +40,16 @@ def find_eigens(count_matrix_list):
     if not np.all(np.isreal(eigen_values)):
         raise ValueError("An eigenvalue is complex")
 
+    # So so far we take the matrix make it symmetric, then normalise it, 
+    # then calculate both the left and right eigenvector
+
     vl = np.linalg.inv(vr)
 
     eq,_ = find_zero_eigenvalue_eigenvector(vl)
     eq /= np.linalg.norm(eq, ord=1)
     eq = np.absolute(eq)
+    #normalises the vector, with only positiv entrire
+    # eq is therefore the zero, or closest to zero eigenvalues right eigenvector, normalised to sum to 1
 
     return vl, vr, eq
 
