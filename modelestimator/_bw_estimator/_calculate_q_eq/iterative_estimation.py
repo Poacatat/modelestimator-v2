@@ -15,7 +15,7 @@ def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     # Get a first simple estimate using a Jukes-Cantor model
 
     #DTYPECHANGE
-    distSamples = np.arange(1, 200, 5, dtype=np.int16)
+    distSamples = np.arange(1, 200, 5)
     posterior = comp_posterior_JC(COUNT_MATRIX_LIST, distSamples)
     PW, W = matrix_weight(COUNT_MATRIX_LIST, posterior, distSamples)
     

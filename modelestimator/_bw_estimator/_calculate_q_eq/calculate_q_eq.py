@@ -15,7 +15,7 @@ def calculate_q_eq(count_matrix_list, threshold):
 
     #   Get a first simple estimate of Q using a Jukes-Cantor model
     #DTYPECHANGE
-    dist_samples = np.arange(1, 400, 5, dtype=np.int16)
+    dist_samples = np.arange(1, 400, 5)
     posterior = comp_posterior_JC(count_matrix_list, dist_samples)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
     pw = matrix_weight(count_matrix_list, posterior, dist_samples)    
     w = posterior.sum(axis=0)

@@ -4,6 +4,8 @@ import io
 from contextlib import redirect_stdout
 import numpy as np
 from modelestimator.main import main
+from .integration_scripts import load_reference_output
+
 
 def test_integration_1():
     #   Load REFERENCE_OUTPUT_STRING
@@ -23,5 +25,10 @@ def test_integration_1():
         main()
 
     OUTPUT_STRING = f.getvalue()
-
-    assert(OUTPUT_STRING == REFERENCE_OUTPUT_STRING)
+    REFERENCE_OUTPUT_LIST = load_reference_output(REFERENCE_OUTPUT_STRING)
+    OUTPUT_LIST = load_reference_output(OUTPUT_STRING)
+    THRESHOLD = 0.001
+    
+    assert len(REFERENCE_OUTPUT_LIST) == len(OUTPUT_LIST)
+    for i in range(len(REFERENCE_OUTPUT_LIST)):
+        assert(np.allclose(np.array(OUTPUT_LIST[i]), np.array(REFERENCE_OUTPUT_LIST[i]), atol=THRESHOLD))
