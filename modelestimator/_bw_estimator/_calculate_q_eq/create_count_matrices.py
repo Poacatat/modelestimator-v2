@@ -8,7 +8,6 @@ def _create_count_matrix(SEQUENCE_PAIRS):
     alphabet_dictionary = {}
     for i, letter in enumerate(ALPHABET):
         alphabet_dictionary[letter] = i
-    print(f"len(sequence_pairs) = {len(SEQUENCE_PAIRS)}")
     for i,_ in enumerate(SEQUENCE_PAIRS[0]):
         a = SEQUENCE_PAIRS[0][i] #len sequence pairs[0] should be 20
         b = SEQUENCE_PAIRS[1][i]

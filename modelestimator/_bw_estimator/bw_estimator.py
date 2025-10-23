@@ -3,7 +3,7 @@ from ._calculate_q_eq.create_count_matrices import create_count_matrices
 from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
 import numpy
 import sys
-numpy.set_printoptions(threshold=sys.maxsize)
+#numpy.set_printoptions(threshold=sys.maxsize)
 import time
 
 

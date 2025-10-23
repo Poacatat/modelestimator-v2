@@ -1,7 +1,7 @@
 import numpy as np
 
 import sys
-np.set_printoptions(threshold=sys.maxsize)
+#np.set_printoptions(threshold=sys.maxsize)
 ### Private functions
 def _matching_letters(a,b, COMPARE_INDELS_FLAG):
     if (len(a) != len(b)):

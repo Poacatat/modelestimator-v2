@@ -54,7 +54,6 @@ def main():
         Q, EQ = bw_estimator(args.threshold, multialignment_list)
         output_string = format_model_output(Q, EQ, args.application)
         print(output_string)
-
     except Exception as e:
         print('Error:', e, file=sys.stderr)
         sys.exit(1)
