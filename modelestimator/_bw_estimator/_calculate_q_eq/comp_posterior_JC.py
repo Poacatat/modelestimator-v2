@@ -5,6 +5,7 @@ np.set_printoptions(threshold=sys.maxsize)
 
 ### Private functions
 def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
+    #all float32
     
     MATRIX_SUM = COUNT_MATRIX.sum()
     # here we for some reason get the total amount of transitions?
@@ -18,7 +19,8 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     # P_0(t) = 1/4 + 3/4 * exp(-4/3 * t)
    
     
-    likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P)
+    likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P).astype(np.float32)
+   
     # fattar inte riktigt denna rad
 
 #   This code is not commented in Octave
@@ -28,7 +30,10 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
 #    endif
     
     likelihood[0] /= 2
+
     likelihood[-1] /= 2
+    
+
     # trapezoidal rule? numerisk integration?
 
     # DIST_SAMPLES[1] - DIST_SAMPLES[0] is the step size, 5
@@ -40,11 +45,13 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     
 ### Interface
 def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
+    # ALL FLOAT32
     NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
     #DTYPECHANGE
     PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES))
     #DTYPECHANGE
     PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
+    
     return PD
         

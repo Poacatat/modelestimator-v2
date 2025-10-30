@@ -28,7 +28,7 @@ def  create_count_matrices(SEQUENCE_PAIRS):
     count_matrix_list = np.empty((NUMBER_OF_SEQUENCE_PAIRS, 20, 20))
    
     #DTYPECHANGE
-    count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS], dtype=np.float32)
+    count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS], dtype=np.uint32)
     
 
     # count_matrix_list[0][a][b] tells you how many times a evolves to b, i think.

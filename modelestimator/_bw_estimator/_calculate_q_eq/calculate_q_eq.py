@@ -12,14 +12,16 @@ def calculate_q_eq(count_matrix_list, threshold):
     #   VR = Right eigenvectors
     #   EQ = Right eigenvector corresponding to zero eigenvalue but normalized so it sums to 1
     vl, vr, eq = find_eigens(count_matrix_list)
-
+    
+    
     #   Get a first simple estimate of Q using a Jukes-Cantor model
     #DTYPECHANGE
-    dist_samples = np.arange(1, 400, 5)
+    dist_samples = np.arange(1, 400, 5) # perrchance make uint32 TODO
     posterior = comp_posterior_JC(count_matrix_list, dist_samples)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
-    pw = matrix_weight(count_matrix_list, posterior, dist_samples)    
+    pw = matrix_weight(count_matrix_list, posterior, dist_samples)   
     w = posterior.sum(axis=0)
     q = estimate_q(pw, w, vl, vr, eq, dist_samples)
+
 
     #   Set loop variables
     difference = 1+threshold
