@@ -24,12 +24,12 @@ def _log_lik(COUNT_MATRIX, PT):
 # prePt is a list of pre-computed matrices Pt=expm(Q*t).
 def _my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES):
     #DTYPECHANGE
-    L = np.zeros(80, dtype=np.float32)
+    L = np.zeros(80, dtype=np.float64)
     
    # Numerical integration, first data point
     P = _log_lik(COUNT_MATRIX, PRE_PT[0])
     #DTYPECHANGE
-    P_TOT = P - np.log(2, dtype=np.float32)
+    P_TOT = P - np.log(2, dtype=np.float64)
     L[0] = P
    
    # middle datapoints
@@ -45,11 +45,11 @@ def _my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES):
     
     # 'multiply' each datapoint by sample 'width';
     #DTYPECHANGE
-    P_TOT += np.log(DIST_SAMPLES[1] - DIST_SAMPLES[0], dtype=np.float32)
+    P_TOT += np.log(DIST_SAMPLES[1] - DIST_SAMPLES[0], dtype=np.float64)
     
     # Setup return value
     #DTYPECHANGE
-    POSTERIOR_VEC = np.exp(L - P_TOT, dtype=np.float32)
+    POSTERIOR_VEC = np.exp(L - P_TOT, dtype=np.float64)
     return POSTERIOR_VEC
 
 

@@ -23,7 +23,7 @@ def find_zero_eigenvalue_eigenvector(matrix):
 
 
 def find_eigens(count_matrix_list):
-    p_sum = sum((0.5 * (matrix + matrix.T)).astype(np.float32) for matrix in count_matrix_list) 
+    p_sum = sum((0.5 * (matrix + matrix.T)).astype(np.float64) for matrix in count_matrix_list) 
    
     # this is a bit wierd
     # anywho, it makes the matrix symmetric, which is maybe needed for the eigenvalue calculation
@@ -100,8 +100,8 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
 
     # The X and Y matrises will contain 20 least-squares problems, one for each eigenvalue
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
-    X = np.empty(NUMBER_OF_DIST_SAMPLES, dtype="float32").reshape((80,1))
-    Y = np.empty((20, NUMBER_OF_DIST_SAMPLES), dtype="float32")
+    X = np.empty(NUMBER_OF_DIST_SAMPLES, dtype="float64").reshape((80,1))
+    Y = np.empty((20, NUMBER_OF_DIST_SAMPLES), dtype="float64")
 
 
     # Find the eigenvector corresponding to eigenvalue = 1
@@ -120,7 +120,7 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
             else:
                 X[i] = 0   # No disturbance if set to 0!
                 Y[li, i] = 0
-    L = np.zeros(20, dtype="float32")
+    L = np.zeros(20, dtype="float64")
     for i,_ in enumerate(L):
         if(i == NULL_VECTOR_INDEX):
             L[i] = 0

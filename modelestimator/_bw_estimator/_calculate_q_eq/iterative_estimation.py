@@ -28,7 +28,7 @@ def _iterative_estimation(COUNT_MATRIX_LIST, THRESHOLD):
     dv = []
     MAX_ITERATIONS = 10
     #DTYPECHANGE
-    Q = np.matrix((20,20), dtype=np.float32)
+    Q = np.matrix((20,20), dtype=np.float64)
     
     while (condition == False):
         iteration += 1
