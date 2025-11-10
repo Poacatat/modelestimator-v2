@@ -38,6 +38,7 @@ def setup_argument_parsing():
 
 
 def main():
+    print("itsa me")
     ap = setup_argument_parsing()
     args = ap.parse_args()
 
@@ -57,3 +58,5 @@ def main():
     except Exception as e:
         print('Error:', e, file=sys.stderr)
         sys.exit(1)
+
+main()
