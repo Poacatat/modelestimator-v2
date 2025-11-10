@@ -38,7 +38,7 @@ def setup_argument_parsing():
 
 
 def main():
-    print("itsa me")
+    print("itsa master")
     ap = setup_argument_parsing()
     args = ap.parse_args()
 
