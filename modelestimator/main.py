@@ -50,6 +50,7 @@ def main():
         except Exception as e:
             print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
             sys.exit(1)
+    print("multilist", multialignment_list[0][0][0])
     try:
         Q, EQ = bw_estimator(args.threshold, multialignment_list)
         output_string = format_model_output(Q, EQ, args.application)
@@ -58,3 +59,4 @@ def main():
     except Exception as e:
         print('Error:', e, file=sys.stderr)
         sys.exit(1)
+main()

@@ -29,6 +29,9 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
         #three3 = time.perf_counter()
     #so there we go, one stp closer to the truth. 
     Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
+    print(type(Q[0][0]))
+    print(type(eq[0]))
+
     #end3 = time.perf_counter()
     #end = time.perf_counter()
     # 
