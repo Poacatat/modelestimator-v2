@@ -73,7 +73,6 @@ def scale_q(Q, EQ):
             raise ZeroDivisionError('No Q diagonal cause a problem in estimate_q.py:scale_q')
 
         Q /= SCALE_FACTOR
-        print("Q type 12345", type(Q[0][0]))
         return Q
 
 
