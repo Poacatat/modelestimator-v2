@@ -18,8 +18,7 @@ def find_zero_eigenvalue_eigenvector(matrix):
         
     eigen_vector, index = zero_eigenvector_candidates[0]
     
-    #   Returns as list to return copy and not reference
-    return list(eigen_vector), index
+    return np.asarray(eigen_vector, dtype=np.float32), index
 
 
 def find_eigens(count_matrix_list):
@@ -29,30 +28,31 @@ def find_eigens(count_matrix_list):
     # anywho, it makes the matrix symmetric, which is maybe needed for the eigenvalue calculation
 
     # Make every row sum to 1
-    row_sums = np.linalg.norm(p_sum, axis=1, ord=1, keepdims=1)
+    row_sums = np.linalg.norm(p_sum, axis=1, ord=1, keepdims=1).astype(np.float32)
     
-    p_sum = np.divide(p_sum, row_sums, out=np.zeros_like(p_sum), where=row_sums != 0)   # Only divide where the row sum is non-zero
+    p_sum = np.divide(p_sum, row_sums, out=np.zeros_like(p_sum, dtype=np.float32), where=row_sums != 0).astype(np.float32)   # Only divide where the row sum is non-zero
 
     
     try:
-        eigen_values, vr = eig(p_sum, left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of p_sum
+        eigen_values, vr = eig(p_sum.astype(np.float32), left=False, right=True)   #   Calculate eigenvalues and the right eigenvectors of p_sum
         
     except ValueError:
         raise ValueError("Unable to calculate eigenvalues")
 
     if not np.all(np.isreal(eigen_values)):
         raise ValueError("An eigenvalue is complex")
-    eigen_values = np.real(eigen_values)
+    eigen_values = np.real(eigen_values).astype(np.float32)
     
 
     # So so far we take the matrix make it symmetric, then normalise it, 
     # then calculate both the left and right eigenvector
 
-    vl = np.linalg.inv(vr)
+    vr = np.real(vr).astype(np.float32)
+    vl = np.linalg.inv(vr).astype(np.float32)
 
     eq,_ = find_zero_eigenvalue_eigenvector(vl)
-    eq /= (np.linalg.norm(eq, ord=1))
-    np.abs(eq, out=eq)
+    eq /= np.linalg.norm(eq, ord=1).astype(np.float32)
+    eq = np.abs(eq, dtype=np.float32)
     
 
 
@@ -67,19 +67,20 @@ def find_eigens(count_matrix_list):
 
 # Scale Q so that the average mutation rate is 0.01
 def scale_q(Q, EQ):
-        SCALE_FACTOR = np.dot(EQ, (-np.diag(Q)))
+        SCALE_FACTOR = np.dot(EQ, (-np.diag(Q))).astype(np.float32)
 
-        if(SCALE_FACTOR == 0):
+        if(np.isclose(SCALE_FACTOR, 0)):
             raise ZeroDivisionError('No Q diagonal cause a problem in estimate_q.py:scale_q')
 
+        Q = Q.astype(np.float32, copy=False)
         Q /= SCALE_FACTOR
-        print("Q type 12345", type(Q[0][0]))
-        return Q
+        return Q.astype(np.float32, copy=False)
 
 
 #   Sometimes, when data is sparse, Q estimates come out with
 #   off-diagonal entries being negative. Not good.
 def fix_negatives(Q):
+    Q = Q.astype(np.float32, copy=False)
     # Replace negative elements with smallest absolute value
     MINIMUM_ELEMENT = np.min(np.abs(Q))
     Q[Q<0] = MINIMUM_ELEMENT
@@ -92,8 +93,8 @@ def fix_negatives(Q):
 
 
 def recover_q(L, VR, VL):
-    Q = 0.01 * (VR @ np.diag(L) @ VL)
-    return Q
+    Q = np.float32(0.01) * (VR.astype(np.float32) @ np.diag(L.astype(np.float32)) @ VL.astype(np.float32))
+    return Q.astype(np.float32)
 
 # Alternative: Estimate eigenvalues of Q using weighted points
 #
@@ -129,7 +130,7 @@ def _weighted_estimate_eigenvals(PW, W, VL, VR, DIST_SAMPLES):
         else:
             tempY = Y[i,:].reshape(80,1)
             res = np.linalg.lstsq(X, tempY, rcond = None)[0][0][0]
-            L[i] = res
+            L[i] = np.float32(res)
     return L
 
 

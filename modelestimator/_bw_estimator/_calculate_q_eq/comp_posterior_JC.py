@@ -46,11 +46,12 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
 ### Interface
 def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
     # ALL FLOAT32
+    DIST_SAMPLES = np.asarray(DIST_SAMPLES, dtype=np.float32)
     NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
     
     PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES), dtype=np.float32)
-    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST])
+    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
     
     return PD
         
