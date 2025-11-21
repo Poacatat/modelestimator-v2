@@ -22,7 +22,6 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
     for msa in msa_list:
         start = time.perf_counter()
         close_pairs = choose_close_pairs(msa, compare_indels_flag)
-        print(close_pairs)
         one1 = time.perf_counter()
         count_matrix_list = create_count_matrices(close_pairs)
         two2 = time.perf_counter()
