@@ -15,16 +15,15 @@ def calculate_q_eq(count_matrix_list, threshold):
     
     
     #   Get a first simple estimate of Q using a Jukes-Cantor model
-    #DTYPECHANGE
-    dist_samples = np.arange(1, 400, 5) # perrchance make uint32 TODO
+    dist_samples = np.arange(1, 400, 5, dtype=np.float32) # perrchance make uint32 TODO
     posterior = comp_posterior_JC(count_matrix_list, dist_samples)   # posterior.shape = (10, 80). Rows are identical to Octave but in different order
     pw = matrix_weight(count_matrix_list, posterior, dist_samples)   
-    w = posterior.sum(axis=0)
-    q = estimate_q(pw, w, vl, vr, eq, dist_samples)
+    w = posterior.sum(axis=0, dtype=np.float32)
+    q = estimate_q(pw, w, vl, vr, eq, dist_samples).astype(np.float32)
 
 
     #   Set loop variables
-    difference = 1+threshold
+    difference = np.float32(1 + threshold)
     iterations = 0
     max_iterations = 10
     
@@ -32,7 +31,6 @@ def calculate_q_eq(count_matrix_list, threshold):
     while (iterations < max_iterations and difference > threshold):
         iterations += 1
         q_new = simple_estimation(count_matrix_list, q, vl, vr, eq, dist_samples)
-        #DTYPECHANGE
-        difference = np.linalg.norm(q_new - q)
+        difference = np.float32(np.linalg.norm(q_new - q))
         q = q_new
     return q, eq

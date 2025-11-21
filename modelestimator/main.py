@@ -6,6 +6,9 @@ from modelestimator.version import __version__
 from modelestimator._bw_estimator.bw_estimator import bw_estimator
 from modelestimator.io import handle_input_file, format_model_output
 
+import time
+
+#do some stuff
 
 
 description='''
@@ -38,9 +41,11 @@ def setup_argument_parsing():
 
 
 def main():
-    print("starting")
+    t_before_arg = time.process_time()
+    
     ap = setup_argument_parsing()
     args = ap.parse_args()
+    t_after_arg = time.process_time()
 
     multialignment_list = []
 
@@ -51,14 +56,24 @@ def main():
         except Exception as e:
             print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
             sys.exit(1)
+    t_after_input = time.process_time()
     try:
         Q, EQ = bw_estimator(args.threshold, multialignment_list)
+        t_after_bw = time.process_time()
         output_string = format_model_output(Q, EQ, args.application)
         print(output_string)
+        t_after_output = time.process_time()
+
+        print("Argument parsing took", t_after_arg-t_before_arg)
+        print("File input took", t_after_input-t_after_arg)
+        print("bw took", t_after_bw - t_after_input)
+        print("Output took",t_after_output-t_after_bw)
+
+
 
     except Exception as e:
         print('Error:', e, file=sys.stderr)
         sys.exit(1)
 
-
-main()
+if __name__ == '__main__':
+    main()

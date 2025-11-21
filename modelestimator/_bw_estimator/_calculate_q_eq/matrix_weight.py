@@ -5,13 +5,12 @@ import numpy as np
 # PW is a list, with the sum of count matrices weighted by their posterior probability
 # for evolutionary distance D.
 def matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES):
-    # all float64
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
-    PW = np.empty((NUMBER_OF_DIST_SAMPLES, 20, 20), dtype=np.float64)
+    PW = np.empty((NUMBER_OF_DIST_SAMPLES, 20, 20), dtype=np.float32)
     
-    PW = np.tensordot(POSTERIOR, COUNT_MATRIX_LIST, axes=([0],[0])).astype(np.float64)#, dtype=np.float64)
+    PW = np.tensordot(POSTERIOR, COUNT_MATRIX_LIST, axes=([0],[0])).astype(np.float32)
    
     with np.errstate(invalid='ignore'):  # Suppress warning for division with NaN
-        PW /= PW.sum(axis=2,keepdims=True)  # Normalize matrix rows
+        PW /= PW.sum(axis=2, keepdims=True)  # Normalize matrix rows
 
     return PW

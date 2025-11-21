@@ -6,8 +6,8 @@ import numpy as np
 
 def simple_estimation(COUNT_MATRIX_LIST, Q_OLD, VL, VR, EQ, DIST_SAMPLES):
     POSTERIOR  = comp_posterior(COUNT_MATRIX_LIST, Q_OLD, EQ, DIST_SAMPLES)
-    W = POSTERIOR.sum(axis=0)
+    W = POSTERIOR.sum(axis=0, dtype=np.float32)
     PW = matrix_weight(COUNT_MATRIX_LIST, POSTERIOR, DIST_SAMPLES)
-    Q_NEW = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES)
+    Q_NEW = estimate_q(PW, W, VL, VR, EQ, DIST_SAMPLES).astype(np.float32)
     
     return Q_NEW

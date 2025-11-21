@@ -5,7 +5,7 @@ np.set_printoptions(threshold=sys.maxsize)
 
 ### Private functions
 def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
-    #all float64
+    # all float32
     
     MATRIX_SUM = COUNT_MATRIX.sum()
     # here we for some reason get the total amount of transitions?
@@ -14,12 +14,12 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     # trace right?
     # in this case i guess it is the amount of times the amino acid does not evolve
     #DTYPECHANGE
-    P = np.exp(- DIST_SAMPLES / 100, dtype=np.float64)
+    P = np.exp(- DIST_SAMPLES / 100, dtype=np.float32)
     # is the correct jukes cantor?
     # P_0(t) = 1/4 + 3/4 * exp(-4/3 * t)
    
     
-    likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P).astype(np.float64)
+    likelihood = binom.pmf(MATRIX_DIAGONAL_SUM, MATRIX_SUM, P).astype(np.float32)
    
     # fattar inte riktigt denna rad
 
@@ -45,13 +45,12 @@ def _jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES):
     
 ### Interface
 def comp_posterior_JC(COUNT_MATRIX_LIST, DIST_SAMPLES):
-    # ALL float64
+    # ALL float32
+    DIST_SAMPLES = np.asarray(DIST_SAMPLES, dtype=np.float32)
     NUMBER_OF_COUNT_MATRICES = len(COUNT_MATRIX_LIST)
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
-    #DTYPECHANGE
-    PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES))
-    #DTYPECHANGE
-    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float64)
+    PD = np.empty((NUMBER_OF_COUNT_MATRICES, NUMBER_OF_DIST_SAMPLES), dtype=np.float32)
+    PD = np.array([_jc_posterior_ng(COUNT_MATRIX, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
     
     return PD
         
