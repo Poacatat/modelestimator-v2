@@ -3,7 +3,7 @@ import numpy as np
 ### Private functions
 def _create_count_matrix(SEQUENCE_PAIRS):
     #DTYPECHANGE
-    return_matrix = np.zeros((20,20))
+    return_matrix = np.zeros((20,20), dtype=np.uint32)
     
     ALPHABET = 'ARNDCQEGHILKMFPSTWYV'
     alphabet_dictionary = {}
@@ -25,8 +25,7 @@ def _create_count_matrix(SEQUENCE_PAIRS):
 def  create_count_matrices(SEQUENCE_PAIRS):
 
     NUMBER_OF_SEQUENCE_PAIRS = len(SEQUENCE_PAIRS)
-    count_matrix_list = np.empty((NUMBER_OF_SEQUENCE_PAIRS, 20, 20))
-   
+    
     #DTYPECHANGE
     count_matrix_list = np.array([_create_count_matrix(SEQUENCE_PAIR) for SEQUENCE_PAIR in SEQUENCE_PAIRS], dtype=np.uint32)
     
