@@ -23,7 +23,7 @@ def find_zero_eigenvalue_eigenvector(matrix):
 
 
 def find_eigens(count_matrix_list):
-    p_sum = sum((0.5 * (matrix + matrix.T)).astype(np.float32) for matrix in count_matrix_list) 
+    p_sum = sum((np.float32(0.5) * (matrix + matrix.T)) for matrix in count_matrix_list) 
    
     # this is a bit wierd
     # anywho, it makes the matrix symmetric, which is maybe needed for the eigenvalue calculation
@@ -42,6 +42,8 @@ def find_eigens(count_matrix_list):
 
     if not np.all(np.isreal(eigen_values)):
         raise ValueError("An eigenvalue is complex")
+    
+    #TODO check master and compare
     eigen_values = np.real(eigen_values)
     
 
