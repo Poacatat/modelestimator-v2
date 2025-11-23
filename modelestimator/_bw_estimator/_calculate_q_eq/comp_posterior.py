@@ -3,6 +3,50 @@ import scipy
 from scipy.special import logsumexp
 
 ### Private functions
+def _precompute_pre_pt(q_matrix, eq_vector, dist_samples):
+    """
+    Pre-compute log(diag(eq) @ expm(Q * t)) for each distance sample.
+    Uses an eigen-based exponential (cheap for 20x20) and falls back to expm
+    if the spectrum looks unstable.
+    """
+    diag_eq = np.diag(eq_vector)
+
+    def _as_real_if_close(matrix, tol=1e-6):
+        real_matrix = np.real_if_close(matrix, tol=tol)
+        if np.iscomplexobj(real_matrix):
+            raise ValueError("Matrix exponential produced complex values")
+        return real_matrix
+
+    try:
+        eigenvalues, vr = scipy.linalg.eig(q_matrix, left=False, right=True)
+        vl = scipy.linalg.inv(vr)
+
+        max_imag = max(
+            np.max(np.abs(np.imag(eigenvalues))),
+            np.max(np.abs(np.imag(vr))),
+            np.max(np.abs(np.imag(vl))),
+        )
+        if max_imag > 1e-6:
+            raise ValueError("Non-negligible imaginary part in eigendecomposition")
+
+        eigenvalues = np.real(eigenvalues)
+        vr = np.real(vr)
+        vl = np.real(vl)
+
+        pre_pt = []
+        for dist_sample in dist_samples:
+            exp_diag = np.exp(eigenvalues * dist_sample, dtype=np.float64)
+            pt = diag_eq @ (vr @ (exp_diag[:, None] * vl))
+            pt = _as_real_if_close(pt)
+            pre_pt.append(np.log(np.clip(pt, np.float64(1e-12), None)))
+        return np.asarray(pre_pt, dtype=np.float32)
+    except Exception:
+        pre_pt = []
+        for dist_sample in dist_samples:
+            pt = diag_eq @ scipy.linalg.expm(q_matrix * dist_sample)
+            pt = _as_real_if_close(pt, tol=1e-3)
+            pre_pt.append(np.log(np.clip(pt, np.float64(1e-12), None)))
+        return np.asarray(pre_pt, dtype=np.float32)
 
 def _log_lik(COUNT_MATRIX, PT):
     return np.sum(COUNT_MATRIX * PT, dtype=np.float32)
@@ -43,23 +87,13 @@ def _my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES):
 #
 def comp_posterior(COUNT_MATRIX_LIST, Q, EQ, DIST_SAMPLES):   
     NUMBER_OF_DIST_SAMPLES = len(DIST_SAMPLES)
-    q32 = np.asarray(Q, dtype=np.float32)
-    eq32 = np.asarray(EQ, dtype=np.float32)
-    PRE_PT = np.array([
-        np.log(
-            np.clip(
-                np.diag(eq32) @ scipy.linalg.expm(q32 * np.float32(DIST_SAMPLE)).astype(np.float32),
-                np.float32(1e-12),
-                None,
-            ),
-            dtype=np.float32,
-        )
-        for DIST_SAMPLE in DIST_SAMPLES], dtype=np.float32)
-
+    q64 = np.asarray(Q, dtype=np.float64)
+    eq64 = np.asarray(EQ, dtype=np.float64)
+    pre_pt = _precompute_pre_pt(q64, eq64, DIST_SAMPLES)
 
     MATRIX_LIST_LENGTH = len(COUNT_MATRIX_LIST)
     PD = np.empty((MATRIX_LIST_LENGTH, NUMBER_OF_DIST_SAMPLES), dtype=np.float32)
-    PD = np.array([_my_posterior_pre(COUNT_MATRIX, PRE_PT, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
+    PD = np.array([_my_posterior_pre(COUNT_MATRIX, pre_pt, DIST_SAMPLES) for COUNT_MATRIX in COUNT_MATRIX_LIST], dtype=np.float32)
 
     return PD
         
