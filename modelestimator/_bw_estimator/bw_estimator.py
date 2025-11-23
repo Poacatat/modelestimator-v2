@@ -15,7 +15,7 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
     Returns: a rate matrix and a corresponding steady state distribution on amino acids,
              as estimated with the BW method.
     '''
-    aggregated_count_matrix_list = np.loads("/home/oscar/a_c_m_l.npy")
+    aggregated_count_matrix_list = np.load("/home/oscar/a_c_m_l.npy")
    
     # MSA list then being just a list of fa file, the > lines being the breaks between sequences
     #for msa in msa_list:
