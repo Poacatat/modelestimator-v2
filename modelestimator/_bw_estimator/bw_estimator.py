@@ -27,7 +27,7 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
     #    aggregated_count_matrix_list.extend(count_matrix_list)
     #    three3 = time.perf_counter()
     #so there we go, one stp closer to the truth.  
-    aggregated_count_matrix_list = np.load("a_c_m_l.npy")
+    aggregated_count_matrix_list = np.load("/home/oscar/a_c_m_l.npy")
     #exit()
     Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
     #end3 = time.perf_counter()
