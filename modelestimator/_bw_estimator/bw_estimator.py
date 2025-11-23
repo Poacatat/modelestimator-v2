@@ -1,7 +1,7 @@
 from ._calculate_q_eq.match_closest_pair import choose_close_pairs
 from ._calculate_q_eq.create_count_matrices import create_count_matrices
 from ._calculate_q_eq.calculate_q_eq import calculate_q_eq
-import numpy
+import numpy as np
 import sys
 #numpy.set_printoptions(threshold=sys.maxsize)
 import time
@@ -19,19 +19,19 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
     aggregated_count_matrix_list = []
    
     # MSA list then being just a list of fa file, the > lines being the breaks between sequences
-    for msa in msa_list:
-        start = time.perf_counter()
-        close_pairs = choose_close_pairs(msa, compare_indels_flag)
-        one1 = time.perf_counter()
-        count_matrix_list = create_count_matrices(close_pairs)
-        two2 = time.perf_counter()
-        aggregated_count_matrix_list.extend(count_matrix_list)
-        three3 = time.perf_counter()
+    #for msa in msa_list:
+    #    start = time.perf_counter()
+    #    close_pairs = choose_close_pairs(msa, compare_indels_flag)
+    #    one1 = time.perf_counter()
+    #    count_matrix_list = create_count_matrices(close_pairs)
+    #    two2 = time.perf_counter()
+    #    aggregated_count_matrix_list.extend(count_matrix_list)
+    #    three3 = time.perf_counter()
+    aggregated_count_matrix_list = np.load("/home/oscar/a_c_m_l.npy")
     #so there we go, one stp closer to the truth. 
+    
     Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
-
-    #end3 = time.perf_counter()
-    end = time.perf_counter()
+    #end = time.perf_counter()
     # 
     
     print(f"Choosing close pairs took {one1 - start:0.4f} seconds")

@@ -60,3 +60,5 @@ def main():
         sys.exit(1)
 
 main()
+
+main()
