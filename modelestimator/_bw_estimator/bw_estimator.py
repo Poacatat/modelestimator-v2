@@ -33,11 +33,11 @@ def bw_estimator(threshold, msa_list, compare_indels_flag = False):
     Q, eq = calculate_q_eq(aggregated_count_matrix_list, threshold)
     #end = time.perf_counter()
     # 
-    
+    '''
     print(f"Choosing close pairs took {one1 - start:0.4f} seconds")
     print(f"Creating count matrices took {two2 - one1:0.4f} seconds")
     print(f"Aggregating count matrices took {three3 - two2:0.4f} seconds")
     print(f"Calculating Q and eq took {end - three3:0.4f} seconds")
-    print(f"Total time: {end - start:0.4f} seconds")
+    print(f"Total time: {end - start:0.4f} seconds")'''
     return Q, eq
 
