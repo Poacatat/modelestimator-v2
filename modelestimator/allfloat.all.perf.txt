@@ -1,0 +1,29 @@
+/home/oscar/modelestimator-v2/.venv/bin/python3.11: Error while finding module specification for 'modelestimator.main' (ModuleNotFoundError: No module named 'modelestimator')
+
+ Performance counter stats for 'system wide':
+
+        77,342,863        cycles                           #    0.611 GHz                         (14.21%)
+        65,087,412        instructions                     #    0.84  insn per cycle              (23.65%)
+         1,606,028        cache-references                 #   12.681 M/sec                       (29.16%)
+           255,533        cache-misses                     #   15.91% of all cache refs           (35.35%)
+        14,325,417        branches                         #  113.112 M/sec                       (41.59%)
+           530,593        branch-misses                    #    3.70% of all branches             (41.67%)
+            126.65 msec   cpu-clock                        #    4.037 CPUs utilized             
+            126.61 msec   task-clock                       #    4.035 CPUs utilized             
+   <not supported>        stalled-cycles-frontend                                               
+   <not supported>        stalled-cycles-backend                                                
+       106,947,530        uops_issued.any                  #  844.448 M/sec                       (29.10%)
+       190,612,443        uops_executed.core               #    1.505 G/sec                       (26.04%)
+         1,379,879        l1d.replacement                  #   10.895 M/sec                       (25.30%)
+         3,441,617        l2_rqsts.references              #   27.175 M/sec                       (25.31%)
+         1,509,524        l2_rqsts.miss                    #   11.919 M/sec                       (25.31%)
+           699,738        mem_load_uops_retired.l1_miss    #    5.525 M/sec                       (15.04%)
+           460,504        mem_load_uops_retired.l2_miss    #    3.636 M/sec                       (13.44%)
+           132,315        mem_load_uops_retired.l3_miss    #    1.045 M/sec                       (10.28%)
+              0.21 Joules power/energy-pkg/                #    1.658 /sec                      
+              0.11 Joules power/energy-cores/              #    0.848 /sec                      
+              0.02 Joules power/energy-ram/                #    0.141 /sec                      
+              0.10 Joules power/energy-cores/              #    0.821 /sec                      
+
+       0.031374753 seconds time elapsed
+

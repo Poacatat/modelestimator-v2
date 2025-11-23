@@ -1,0 +1,32 @@
+
+ Performance counter stats for '/home/oscar/modelestimator-v2/.venv/bin/python3.11 -m modelestimator.main -f phylip ../test1wag.phy':
+
+    10,964,745,515      cycles                           #    1.858 GHz                         (17.36%)
+    11,639,130,231      instructions                     #    1.06  insn per cycle              (24.52%)
+        71,353,447      cache-references                 #   12.092 M/sec                       (25.00%)
+         7,598,016      cache-misses                     #   10.65% of all cache refs           (28.09%)
+     2,010,438,599      branches                         #  340.715 M/sec                       (33.76%)
+        21,960,695      branch-misses                    #    1.09% of all branches             (34.42%)
+          5,900.64 msec cpu-clock                        #    1.915 CPUs utilized             
+          5,900.91 msec task-clock                       #    1.916 CPUs utilized             
+   <not supported>      stalled-cycles-frontend                                               
+   <not supported>      stalled-cycles-backend                                                
+    14,810,573,779      uops_issued.any                  #    2.510 G/sec                       (27.83%)
+    19,483,983,880      uops_executed.core               #    3.302 G/sec                       (28.00%)
+       140,382,392      l1d.replacement                  #   23.791 M/sec                       (27.95%)
+       459,128,178      l2_rqsts.references              #   77.810 M/sec                       (27.96%)
+        82,311,157      l2_rqsts.miss                    #   13.950 M/sec                       (27.56%)
+        85,969,388      mem_load_uops_retired.l1_miss    #   14.570 M/sec                       (23.05%)
+        15,653,522      mem_load_uops_retired.l2_miss    #    2.653 M/sec                       (16.24%)
+         2,003,827      mem_load_uops_retired.l3_miss    #  339.595 K/sec                       (14.14%)
+   <not supported> Joules power/energy-pkg/                                                     
+   <not supported> Joules power/energy-cores/                                                   
+   <not supported> Joules power/energy-ram/                                                     
+   <not supported> Joules power/energy-cores/                                                   
+
+       3.080477557 seconds time elapsed
+
+       5.775259000 seconds user
+       0.125657000 seconds sys
+
+

@@ -38,22 +38,22 @@ def setup_argument_parsing():
 
 
 def main():
-    ap = setup_argument_parsing()
-    args = ap.parse_args()
+    #ap = setup_argument_parsing()
+    #args = ap.parse_args()
 
     multialignment_list = []
-
-    for f in args.infiles:
-        try:
-            multialignment = handle_input_file(f, args.format)
-            multialignment_list.append(multialignment)
-        except Exception as e:
-            print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
-            sys.exit(1)
-    print("multilist", multialignment_list[0][0][0])
+    
+    #for f in args.infiles:
+    #    try:
+    #        multialignment = handle_input_file(f, args.format)
+    #        multialignment_list.append(multialignment)
+    #    except Exception as e:
+    #        print(f'Error reading alignments, file "{f}":', e, file=sys.stderr)
+    #        sys.exit(1)
+    #print("multilist", multialignment_list[0][0][0])
     try:
-        Q, EQ = bw_estimator(args.threshold, multialignment_list)
-        output_string = format_model_output(Q, EQ, args.application)
+        Q, EQ = bw_estimator(0.001, multialignment_list)
+        output_string = format_model_output(Q, EQ, 'paml')
         print(output_string)
 
     except Exception as e:

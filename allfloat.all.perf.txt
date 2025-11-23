@@ -1,0 +1,28 @@
+
+ Performance counter stats for 'system wide':
+
+    10,636,897,394        cycles                           #    0.927 GHz                         (15.58%)
+    10,407,988,838        instructions                     #    0.98  insn per cycle              (22.73%)
+        71,481,593        cache-references                 #    6.230 M/sec                       (25.12%)
+         7,446,185        cache-misses                     #   10.42% of all cache refs           (29.98%)
+     1,769,918,005        branches                         #  154.263 M/sec                       (35.70%)
+        21,047,098        branch-misses                    #    1.19% of all branches             (35.73%)
+         11,473.39 msec   cpu-clock                        #    4.000 CPUs utilized             
+         11,473.35 msec   task-clock                       #    4.000 CPUs utilized             
+   <not supported>        stalled-cycles-frontend                                               
+   <not supported>        stalled-cycles-backend                                                
+    13,396,480,221        uops_issued.any                  #    1.168 G/sec                       (28.59%)
+    24,935,485,584        uops_executed.core               #    2.173 G/sec                       (28.59%)
+       138,961,781        l1d.replacement                  #   12.112 M/sec                       (28.59%)
+       468,029,727        l2_rqsts.references              #   40.793 M/sec                       (28.59%)
+        88,936,645        l2_rqsts.miss                    #    7.752 M/sec                       (28.59%)
+        70,954,037        mem_load_uops_retired.l1_miss    #    6.184 M/sec                       (19.60%)
+        15,597,825        mem_load_uops_retired.l2_miss    #    1.359 M/sec                       (16.18%)
+         1,845,606        mem_load_uops_retired.l3_miss    #  160.860 K/sec                       (14.22%)
+             19.75 Joules power/energy-pkg/                #    1.721 /sec                      
+             11.09 Joules power/energy-cores/              #    0.967 /sec                      
+              1.29 Joules power/energy-ram/                #    0.112 /sec                      
+             11.09 Joules power/energy-cores/              #    0.967 /sec                      
+
+       2.868148613 seconds time elapsed
+
